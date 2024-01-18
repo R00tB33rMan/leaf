@@ -154,7 +154,7 @@
     </repository>
     <repository>
       <id>elytrium-repo</id>
-      <url>https://maven.elytrium.net</url>
+      <url>https://maven.elytrium.net/repo/</url>
     </repository>
     <repository>
       <id>sonatype-snapshots</id>

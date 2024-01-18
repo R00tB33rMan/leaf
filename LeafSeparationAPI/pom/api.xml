@@ -39,7 +39,7 @@
         <!-- Elytrium -->
         <repository>
             <id>elytrium-repo</id>
-            <url>https://maven.elytrium.net</url>
+            <url>https://maven.elytrium.net/repo/</url>
         </repository>
 
         <!-- Spark -->
