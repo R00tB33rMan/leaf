@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 /**
  * The brand plugin message hook.
  */
-class BrandPluginMessagePacketHook extends PluginMessagePacket {
+class BrandPluginMessageHook extends PluginMessagePacket {
 
     protected static MethodHandle SERVER_CONNECTION_FIELD;
 
