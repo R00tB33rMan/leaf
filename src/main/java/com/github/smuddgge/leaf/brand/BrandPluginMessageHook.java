@@ -40,7 +40,7 @@ class BrandPluginMessagePacketHook extends PluginMessagePacket {
         // Check if the brand feature is enabled.
         if (!(handler instanceof BackendPlaySessionHandler)
                 || !ConfigMain.get().getBoolean("brand.in_game.enabled", false)
-                || !PluginMessagePacketUtil.isMcBrand(this)) {
+                || !PluginMessageUtil.isMcBrand(this)) {
 
             return super.handle(handler);
         }
