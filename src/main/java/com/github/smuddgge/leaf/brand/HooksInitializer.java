@@ -7,6 +7,7 @@ import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.StateRegistry;
 import io.netty.util.collection.IntObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.elytrium.commons.utils.reflection.ReflectionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;

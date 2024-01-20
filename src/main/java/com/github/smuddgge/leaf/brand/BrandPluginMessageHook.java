@@ -12,12 +12,13 @@ import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
-import com.velocitypowered.proxy.protocol.packet.PluginMessagePacket;
+import com.velocitypowered.proxy.protocol.packet.PluginMessage;
 import com.velocitypowered.proxy.protocol.util.PluginMessageUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import net.elytrium.commons.utils.reflection.ReflectionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 /**
  * The brand plugin message hook.
  */
-class BrandPluginMessageHook extends PluginMessagePacket {
+class BrandPluginMessageHook extends PluginMessage {
 
     protected static MethodHandle SERVER_CONNECTION_FIELD;
 
@@ -81,7 +82,7 @@ class BrandPluginMessageHook extends PluginMessagePacket {
      * @param player  The instance of the player.
      * @return The instance of the new message.
      */
-    private @NotNull PluginMessagePacket getMinecraftBrand(@NotNull PluginMessagePacket message, @NotNull Player player) {
+    private @NotNull PluginMessage getMinecraftBrand(@NotNull PluginMessage message, @NotNull Player player) {
 
         // Get the current brand.
         String currentBrand = PluginMessageUtil.readBrandMessage(message.content());
@@ -102,12 +103,12 @@ class BrandPluginMessageHook extends PluginMessagePacket {
         // Check if the minecraft version is above or equal to 1.8
         if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_8) >= 0) {
             ProtocolUtils.writeString(rewrittenBuf, rewrittenBrand);
-            return new PluginMessagePacket(message.getChannel(), rewrittenBuf);
+            return new PluginMessage(message.getChannel(), rewrittenBuf);
         }
 
         // Otherwise the minecraft version is below.
         rewrittenBuf.writeCharSequence(rewrittenBrand, StandardCharsets.UTF_8);
-        return new PluginMessagePacket(message.getChannel(), rewrittenBuf);
+        return new PluginMessage(message.getChannel(), rewrittenBuf);
     }
 
     /**
@@ -125,7 +126,7 @@ class BrandPluginMessageHook extends PluginMessagePacket {
      * @return The class type.
      */
     public Class<? extends MinecraftPacket> getType() {
-        return PluginMessagePacket.class;
+        return PluginMessage.class;
     }
 
     /**
