@@ -60,13 +60,13 @@
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-api</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
+            <version>3.3.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-proxy</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
+            <version>3.3.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>2.0</version>
+            <version>2.2</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -83,7 +83,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.2</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -91,7 +91,7 @@
         <dependency>
             <groupId>dev.simplix</groupId>
             <artifactId>protocolize-api</artifactId>
-            <version>2.2.3</version>
+            <version>2.3.2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -99,7 +99,7 @@
         <dependency>
             <groupId>com.github.smuddgge</groupId>
             <artifactId>SquishyDatabase</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.0</version>
         </dependency>
 
         <!-- Discord Webhooks -->
@@ -120,13 +120,13 @@
         <dependency>
             <groupId>net.elytrium</groupId>
             <artifactId>java-commons</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.2.5</version>
         </dependency>
 
         <dependency>
             <groupId>net.elytrium</groupId>
             <artifactId>fastprepare</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.9</version>
         </dependency>
 
         <!-- Spark -->
