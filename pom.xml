@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>4.4.5</version>
+    <version>4.5.0.DEV.0</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -70,11 +70,18 @@
             <version>3.3.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-proxy</artifactId>
             <version>3.3.0-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.velocitypowered</groupId>
+                    <artifactId>velocity-proxy-log4j2-plugin</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Velocity Bleeding Edge Dependencies -->
@@ -111,7 +118,7 @@
         <dependency>
             <groupId>com.github.smuddgge</groupId>
             <artifactId>SquishyDatabase</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.0</version>
         </dependency>
 
         <!-- Configuration API -->
