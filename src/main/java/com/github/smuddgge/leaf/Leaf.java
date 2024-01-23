@@ -296,7 +296,6 @@ public class Leaf {
                 );
             }
 
-
             if (Objects.equals(type, "MYSQL")) {
                 DatabaseFactory databaseFactory = DatabaseFactory.MYSQL;
                 Leaf.database = databaseFactory.create(
