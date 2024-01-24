@@ -12,7 +12,7 @@ import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
-import com.velocitypowered.proxy.protocol.packet.PluginMessage;
+import com.velocitypowered.proxy.protocol.packet.PluginMessagePacket;
 import com.velocitypowered.proxy.protocol.util.PluginMessageUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 /**
  * The brand plugin message hook.
  */
-class BrandPluginMessageHook extends PluginMessage {
+class BrandPluginMessageHook extends PluginMessagePacket {
 
     protected static MethodHandle SERVER_CONNECTION_FIELD;
 
@@ -56,9 +56,11 @@ class BrandPluginMessageHook extends PluginMessage {
                     this.getMinecraftBrand(this, player)
             );
 
-            if (future == null) { return true; }
+            if (future == null) {
+                return true;
+            }
 
-			future.addListener((ChannelFutureListener) channelFuture -> {
+            future.addListener((ChannelFutureListener) channelFuture -> {
                 if (channelFuture.isSuccess()) {
                     // Flushes out channel in case of edge cases.
                     channelFuture.channel().flush();
@@ -82,7 +84,7 @@ class BrandPluginMessageHook extends PluginMessage {
      * @param player  The instance of the player.
      * @return The instance of the new message.
      */
-    private @NotNull PluginMessage getMinecraftBrand(@NotNull PluginMessage message, @NotNull Player player) {
+    private @NotNull PluginMessagePacket getMinecraftBrand(@NotNull PluginMessagePacket message, @NotNull Player player) {
 
         // Get the current brand.
         String currentBrand = PluginMessageUtil.readBrandMessage(message.content());
@@ -103,12 +105,12 @@ class BrandPluginMessageHook extends PluginMessage {
         // Check if the minecraft version is above or equal to 1.8
         if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_8) >= 0) {
             ProtocolUtils.writeString(rewrittenBuf, rewrittenBrand);
-            return new PluginMessage(message.getChannel(), rewrittenBuf);
+            return new PluginMessagePacket(message.getChannel(), rewrittenBuf);
         }
 
         // Otherwise the minecraft version is below.
         rewrittenBuf.writeCharSequence(rewrittenBrand, StandardCharsets.UTF_8);
-        return new PluginMessage(message.getChannel(), rewrittenBuf);
+        return new PluginMessagePacket(message.getChannel(), rewrittenBuf);
     }
 
     /**
@@ -126,7 +128,7 @@ class BrandPluginMessageHook extends PluginMessage {
      * @return The class type.
      */
     public Class<? extends MinecraftPacket> getType() {
-        return PluginMessage.class;
+        return PluginMessagePacket.class;
     }
 
     /**
