@@ -50,8 +50,12 @@ class BrandPluginMessageHook extends PluginMessagePacket {
         try {
 
             // Get the instance of the player.
-            VelocityServerConnection connection = (VelocityServerConnection) SERVER_CONNECTION_CONFIG_FIELD.invoke(handler);
-            ConnectedPlayer player = connection.getPlayer();
+            if (handler instanceof BackendPlaySessionHandler) {
+              ConnectedPlayer player = connection.getPlayer();
+              VelocityServerConnection connection = (VelocityServerConnection) SERVER_CONNECTION_BACKEND_PLAY_FIELD.invoke(handler);
+            } else if (handler instanceof ConfigSessionHandler) {
+              ConnectedPlayer player = connection.getPlayer();
+              VelocityServerConnection connection = (VelocityServerConnection) SERVER_CONNECTION_CONFIG_FIELD.invoke(handler);
 
             // Write the minecraft brand.
             ChannelFuture future = player.getConnection().write(
