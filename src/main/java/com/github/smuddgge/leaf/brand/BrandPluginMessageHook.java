@@ -8,6 +8,7 @@ import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.connection.MinecraftSessionHandler;
 import com.velocitypowered.proxy.connection.backend.BackendPlaySessionHandler;
+import com.velocitypowered.proxy.connection.backend.ConfigSessionHandler;
 import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
@@ -31,7 +32,8 @@ import java.util.function.Supplier;
  */
 class BrandPluginMessageHook extends PluginMessagePacket {
 
-    protected static MethodHandle SERVER_CONNECTION_FIELD;
+    protected static MethodHandle SERVER_CONNECTION_BACKEND_PLAY_FIELD;
+    protected static MethodHandle SERVER_CONNECTION_CONFIG_FIELD;
 
     @Override
     public boolean handle(MinecraftSessionHandler handler) {
@@ -48,7 +50,12 @@ class BrandPluginMessageHook extends PluginMessagePacket {
         try {
 
             // Get the instance of the player.
-            VelocityServerConnection connection = (VelocityServerConnection) SERVER_CONNECTION_FIELD.invoke(handler);
+            VelocityServerConnection connection = null;
+            if (handler instanceof BackendPlaySessionHandler) {
+                connection = (VelocityServerConnection) SERVER_CONNECTION_BACKEND_PLAY_FIELD.invoke(handler);
+            } else if (handler instanceof ConfigSessionHandler) {
+                connection = (VelocityServerConnection) SERVER_CONNECTION_CONFIG_FIELD.invoke(handler);
+            }
             ConnectedPlayer player = connection.getPlayer();
 
             // Write the minecraft brand.
