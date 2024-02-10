@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.brand;
 
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.connection.backend.BackendPlaySessionHandler;
+import com.velocitypowered.proxy.connection.backend.ConfigSessionHandler;
 import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.StateRegistry;
@@ -30,9 +31,13 @@ public final class HooksInitializer {
         try {
 
             // Get the server connection field.
-            BrandPluginMessageHook.SERVER_CONNECTION_FIELD = MethodHandles
+            BrandPluginMessageHook.SERVER_CONNECTION_BACKEND_PLAY_FIELD = MethodHandles
                     .privateLookupIn(BackendPlaySessionHandler.class, MethodHandles.lookup())
                     .findGetter(BackendPlaySessionHandler.class, "serverConn", VelocityServerConnection.class);
+
+            BrandPluginMessageHook.SERVER_CONNECTION_CONFIG_FIELD = MethodHandles
+                    .privateLookupIn(ConfigSessionHandler.class, MethodHandles.lookup())
+                    .findGetter(ConfigSessionHandler.class, "serverConn", VelocityServerConnection.class);
 
             MethodHandle versionsField = MethodHandles.privateLookupIn(StateRegistry.PacketRegistry.class, MethodHandles.lookup())
                     .findGetter(StateRegistry.PacketRegistry.class, "versions", Map.class);
@@ -53,7 +58,11 @@ public final class HooksInitializer {
 
             StateRegistry.PacketRegistry playClientside = (StateRegistry.PacketRegistry) clientsideGetter.invokeExact(StateRegistry.PLAY);
 
+            StateRegistry.PacketRegistry configClientside = (StateRegistry.PacketRegistry) clientsideGetter.invokeExact(StateRegistry.CONFIG);
+
             ((Map<ProtocolVersion, StateRegistry.PacketRegistry.ProtocolRegistry>) versionsField.invokeExact(playClientside)).forEach(consumer);
+
+            ((Map<ProtocolVersion, StateRegistry.PacketRegistry.ProtocolRegistry>) versionsField.invokeExact(configClientside)).forEach(consumer);
 
         } catch (Throwable e) {
             throw new ReflectionException(e);
