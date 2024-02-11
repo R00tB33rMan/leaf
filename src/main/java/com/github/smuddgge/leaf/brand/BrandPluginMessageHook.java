@@ -53,12 +53,8 @@ class BrandPluginMessageHook extends PluginMessagePacket {
             VelocityServerConnection connection = null;
             if (handler instanceof BackendPlaySessionHandler) {
                 connection = (VelocityServerConnection) SERVER_CONNECTION_BACKEND_PLAY_FIELD.invoke(handler);
-                player.getConnection().write(this.rewriteMinecraftBrand(this, player.getProtocolVersion()));
-                return true;
             } else if (handler instanceof ConfigSessionHandler) {
                 connection = (VelocityServerConnection) SERVER_CONNECTION_CONFIG_FIELD.invoke(handler);
-                player.getConnection().write(this.rewriteMinecraftBrand(this, player.getProtocolVersion()));
-                return true;
             }
             ConnectedPlayer player = connection.getPlayer();
 
