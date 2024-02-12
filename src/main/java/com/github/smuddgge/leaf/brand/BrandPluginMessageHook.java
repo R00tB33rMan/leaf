@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.brand;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.datatype.User;
@@ -37,26 +38,24 @@ class BrandPluginMessageHook extends PluginMessagePacket {
 
     @Override
     public boolean handle(MinecraftSessionHandler handler) {
-
         // Check if the handler is the correct handler.
         // Check if the brand feature is enabled.
-        if (!(handler instanceof ConfigSessionHandler)
-                || !ConfigMain.get().getBoolean("brand.in_game.enabled", false)
-                || !PluginMessageUtil.isMcBrand(this)) {
-
+        if (!ConfigMain.get().getBoolean("brand.in_game.enabled", false) || !PluginMessageUtil.isMcBrand(this)) {
             return super.handle(handler);
         }
 
         try {
+            ConnectedPlayer player = null;
 
-            // Get the instance of the player.
-            VelocityServerConnection connection = null;
             if (handler instanceof BackendPlaySessionHandler) {
-                connection = (VelocityServerConnection) SERVER_CONNECTION_BACKEND_PLAY_FIELD.invoke(handler);
+               player = ((VelocityServerConnection) SERVER_CONNECTION_BACKEND_PLAY_FIELD.invoke(handler)).getPlayer();
             } else if (handler instanceof ConfigSessionHandler) {
-                connection = (VelocityServerConnection) SERVER_CONNECTION_CONFIG_FIELD.invoke(handler);
+                player = ((VelocityServerConnection) SERVER_CONNECTION_CONFIG_FIELD.invoke(handler)).getPlayer();
             }
-            ConnectedPlayer player = connection.getPlayer();
+
+            if (player == null) {
+                return true;
+            }
 
             // Write the minecraft brand.
             ChannelFuture future = player.getConnection().write(
@@ -92,7 +91,6 @@ class BrandPluginMessageHook extends PluginMessagePacket {
      * @return The instance of the new message.
      */
     private @NotNull PluginMessagePacket getMinecraftBrand(@NotNull PluginMessagePacket message, @NotNull Player player) {
-
         // Get the current brand.
         String currentBrand = PluginMessageUtil.readBrandMessage(message.content());
 
@@ -112,11 +110,10 @@ class BrandPluginMessageHook extends PluginMessagePacket {
         // Check if the minecraft version is above or equal to 1.8
         if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_8) >= 0) {
             ProtocolUtils.writeString(rewrittenBuf, rewrittenBrand);
-            return new PluginMessagePacket(message.getChannel(), rewrittenBuf);
+        } else {
+            rewrittenBuf.writeCharSequence(rewrittenBrand, StandardCharsets.UTF_8);
         }
 
-        // Otherwise the minecraft version is below.
-        rewrittenBuf.writeCharSequence(rewrittenBrand, StandardCharsets.UTF_8);
         return new PluginMessagePacket(message.getChannel(), rewrittenBuf);
     }
 
