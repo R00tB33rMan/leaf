@@ -185,6 +185,21 @@ public class OpPlayerAdapter implements Player {
     }
 
     @Override
+    public void addCustomChatCompletions(@NotNull Collection<String> collection) {
+
+    }
+
+    @Override
+    public void removeCustomChatCompletions(@NotNull Collection<String> collection) {
+
+    }
+
+    @Override
+    public void setCustomChatCompletions(@NotNull Collection<String> collection) {
+
+    }
+
+    @Override
     public Tristate getPermissionValue(String permission) {
         return Tristate.TRUE;
     }
