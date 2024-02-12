@@ -38,6 +38,7 @@ class BrandPluginMessageHook extends PluginMessagePacket {
 
     @Override
     public boolean handle(MinecraftSessionHandler handler) {
+
         // Check if the handler is the correct handler.
         // Check if the brand feature is enabled.
         if (!ConfigMain.get().getBoolean("brand.in_game.enabled", false) || !PluginMessageUtil.isMcBrand(this)) {
@@ -45,8 +46,9 @@ class BrandPluginMessageHook extends PluginMessagePacket {
         }
 
         try {
-            ConnectedPlayer player = null;
 
+            // Get the instance of the player.
+            ConnectedPlayer player = null;
             if (handler instanceof BackendPlaySessionHandler) {
                player = ((VelocityServerConnection) SERVER_CONNECTION_BACKEND_PLAY_FIELD.invoke(handler)).getPlayer();
             } else if (handler instanceof ConfigSessionHandler) {
@@ -91,6 +93,7 @@ class BrandPluginMessageHook extends PluginMessagePacket {
      * @return The instance of the new message.
      */
     private @NotNull PluginMessagePacket getMinecraftBrand(@NotNull PluginMessagePacket message, @NotNull Player player) {
+
         // Get the current brand.
         String currentBrand = PluginMessageUtil.readBrandMessage(message.content());
 
@@ -110,6 +113,7 @@ class BrandPluginMessageHook extends PluginMessagePacket {
         // Check if the minecraft version is above or equal to 1.8
         if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_8) >= 0) {
             ProtocolUtils.writeString(rewrittenBuf, rewrittenBrand);
+        // Otherwise the minecraft version is below.
         } else {
             rewrittenBuf.writeCharSequence(rewrittenBrand, StandardCharsets.UTF_8);
         }
